@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Storage</title>
+    <script src="https://cdn.jsdelivr.net/npm/ethers/dist/ethers.min.js"></script>
+</head>
+<body>
+    <h1>Simple Storage</h1>
+    <input type="number" id="valueInput" placeholder="Enter value">
+    <button onclick="setValue()">Set Value</button>
+    <button onclick="getValue()">Get Value</button>
+    <p id="currentValue">Current Value: </p>
+
+    <script>
+        const contractAddress = "YOUR_CONTRACT_ADDRESS";
+        const abi = [
+            "function setValue(uint256 newValue) public",
+            "function getValue() public view returns (uint256)"
+        ];
+
+        const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const signer = provider.getSigner();
+        const contract = new ethers.Contract(contractAddress, abi, signer);
+
+        async function setValue() {
+            const value = document.getElementById("valueInput").value;
+            await contract.setValue(value);
+        }
+
+        async function getValue() {
+            const value = await contract.getValue();
+            document.getElementById("currentValue").innerText = "Current Value: " + value;
+        }
+    </script>
+</body>
+</html>
